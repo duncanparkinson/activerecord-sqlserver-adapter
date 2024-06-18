@@ -123,6 +123,8 @@ module ActiveRecord
               value.quoted
             when String, ActiveSupport::Multibyte::Chars
               "N#{super}"
+            when ActiveRecord::Relation::QueryAttribute
+              "N#{super(value.value_before_type_cast)}"
             else
               super
             end
