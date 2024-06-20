@@ -115,22 +115,17 @@ module ActiveRecord
         private_constant :COLUMN_NAME, :COLUMN_NAME_WITH_ORDER
 
         def quote(value)
-          begin
-            case value
-            when Type::Binary::Data
-              "0x#{value.hex}"
-            when ActiveRecord::Type::SQLServer::Data
-              value.quoted
-            when String, ActiveSupport::Multibyte::Chars
-              "N#{super}"
-            when ActiveRecord::Relation::QueryAttribute
-              "N#{super(value.value_before_type_cast)}"
-            else
-              super
-            end
-          rescue Exception => e
-            binding.pry
-            raise e
+          case value
+          when Type::Binary::Data
+            "0x#{value.hex}"
+          when ActiveRecord::Type::SQLServer::Data
+            value.quoted
+          when String, ActiveSupport::Multibyte::Chars
+            "N#{super}"
+          when ActiveRecord::Relation::QueryAttribute
+            "N#{super(value.value_before_type_cast)}"
+          else
+            super
           end
         end
 
